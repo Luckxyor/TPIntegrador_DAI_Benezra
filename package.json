@@ -1,0 +1,24 @@
+{
+  "name": "tp_integrador_benezra",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Luckxyor/TP_Integrador_Benezra.git"
+  },
+  "author": "Lucas Benezra",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Luckxyor/TP_Integrador_Benezra/issues"
+  },
+  "homepage": "https://github.com/Luckxyor/TP_Integrador_Benezra#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
