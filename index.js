@@ -1,16 +1,22 @@
 import express from "express";
 import cors from "cors";
-import ProvinceRouter from "./src/controllers/province-controller.js";
+
+import EventRouter from "./src/routes/event-routes.js";
 const app = express();
 const port = 3000;
-// Inclusión de los Middlewares
+
 app.use(cors());
 app.use(express.json());
-//app.use('/front', express.static('public'));
-//app.use('/api/event', EventRouter);
-app.use('/api/provinces', ProvinceRouter);
-//app.use('/api/user', UserRouter);
-//app.use(unknownEndpoint);
+
+app.use('/api/event', EventRouter);
+
+// Middleware para manejar rutas que no existen (404)
+app.use((req, res) => {
+    res.status(404).json({
+        error: `La ruta ${req.originalUrl} no existe`
+    });
+});
+
 app.listen(port, () => {
     console.log(`"server" Listening on port ${port}`);
 });
