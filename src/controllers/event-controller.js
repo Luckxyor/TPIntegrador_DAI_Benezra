@@ -2,7 +2,7 @@ import EventService from '../services/event-service.js'
 
 export default class EventController {
     constructor() {
-        this.servicioEventos = new EventService();
+        this.service = new EventService();
     }
 
     // Obtener todos los eventos con filtros
@@ -24,13 +24,13 @@ export default class EventController {
             }
             
             // Obtener eventos
-            const eventos = await this.servicioEventos.obtenerEventos(filtros);
+            const eventos = await this.service.obtenerEventos(filtros);
             return res.status(200).json(eventos);
             
         } catch (error) {
-            console.log('Error en controlador:', error);
+            console.log('Error en controlador:', error.message);
             return res.status(500).json({
-                mensaje: 'Error en el servidor'
+                error: 'Error interno del servidor'
             });
         }
     }
@@ -40,7 +40,7 @@ export default class EventController {
         try {
             const { id } = req.params;
             
-            const resultado = await this.servicioEventos.obtenerEventoPorId(id);
+            const resultado = await this.service.obtenerEventoPorId(id);
             
             if (resultado.exito) {
                 return res.status(200).json(resultado.datos);
@@ -61,10 +61,157 @@ export default class EventController {
             }
             
         } catch (error) {
-            console.log('Error en controlador:', error);
+            console.log('Error en controlador:', error.message);
             return res.status(500).json({
-                exito: false,
-                mensaje: 'Error en el servidor'
+                error: 'Error interno del servidor'
+            });
+        }
+    }
+    
+    // POST /api/event/ - Crear evento
+    crearEvento = async (req, res) => {
+        try {
+            const datosEvento = req.body;
+            const idUsuario = req.usuario.id; // Del middleware de autenticación
+            
+            const resultado = await this.service.crearEvento(datosEvento, idUsuario);
+            
+            if (resultado.exito) {
+                return res.status(resultado.codigo).json(resultado.evento);
+            } else {
+                return res.status(resultado.codigo).json({
+                    error: resultado.mensaje
+                });
+            }
+            
+        } catch (error) {
+            console.log('Error en controlador de crear evento:', error.message);
+            return res.status(500).json({
+                error: 'Error interno del servidor'
+            });
+        }
+    }
+    
+    // PUT /api/event/ - Actualizar evento
+    actualizarEvento = async (req, res) => {
+        try {
+            const datosEvento = req.body;
+            const idUsuario = req.usuario.id; // Del middleware de autenticación
+            
+            if (!datosEvento.id) {
+                return res.status(400).json({
+                    error: 'El ID del evento es requerido para actualizar.'
+                });
+            }
+            
+            const resultado = await this.service.actualizarEvento(datosEvento, idUsuario);
+            
+            if (resultado.exito) {
+                return res.status(resultado.codigo).json(resultado.evento);
+            } else {
+                return res.status(resultado.codigo).json({
+                    error: resultado.mensaje
+                });
+            }
+            
+        } catch (error) {
+            console.log('Error en controlador de actualizar evento:', error.message);
+            return res.status(500).json({
+                error: 'Error interno del servidor'
+            });
+        }
+    }
+    
+    // DELETE /api/event/:id - Eliminar evento
+    eliminarEvento = async (req, res) => {
+        try {
+            const idEvento = parseInt(req.params.id);
+            const idUsuario = req.usuario.id; // Del middleware de autenticación
+            
+            if (isNaN(idEvento)) {
+                return res.status(400).json({
+                    error: 'ID del evento inválido'
+                });
+            }
+            
+            const resultado = await this.service.eliminarEvento(idEvento, idUsuario);
+            
+            if (resultado.exito) {
+                return res.status(resultado.codigo).json({
+                    message: resultado.mensaje
+                });
+            } else {
+                return res.status(resultado.codigo).json({
+                    error: resultado.mensaje
+                });
+            }
+            
+        } catch (error) {
+            console.log('Error en controlador de eliminar evento:', error.message);
+            return res.status(500).json({
+                error: 'Error interno del servidor'
+            });
+        }
+    }
+    
+    // POST /api/event/:id/enrollment - Inscribir usuario a evento
+    inscribirUsuarioAEvento = async (req, res) => {
+        try {
+            const idEvento = parseInt(req.params.id);
+            const idUsuario = req.usuario.id; // Del middleware de autenticación
+            
+            if (isNaN(idEvento)) {
+                return res.status(400).json({
+                    error: 'ID del evento inválido'
+                });
+            }
+            
+            const resultado = await this.service.inscribirUsuarioAEvento(idEvento, idUsuario);
+            
+            if (resultado.exito) {
+                return res.status(resultado.codigo).json(resultado.inscripcion);
+            } else {
+                return res.status(resultado.codigo).json({
+                    error: resultado.mensaje
+                });
+            }
+            
+        } catch (error) {
+            console.log('Error en controlador de inscripción:', error.message);
+            return res.status(500).json({
+                error: 'Error interno del servidor'
+            });
+        }
+    }
+    
+    // DELETE /api/event/:id/enrollment - Desinscribir usuario de evento
+    desinscribirUsuarioDeEvento = async (req, res) => {
+        try {
+            const idEvento = parseInt(req.params.id);
+            const idUsuario = req.usuario.id; // Del middleware de autenticación
+            
+            if (isNaN(idEvento)) {
+                return res.status(400).json({
+                    error: 'ID del evento inválido'
+                });
+            }
+            
+            const resultado = await this.service.desinscribirUsuarioDeEvento(idEvento, idUsuario);
+            
+            if (resultado.exito) {
+                return res.status(resultado.codigo).json({
+                    message: resultado.mensaje
+                });
+            } else {
+                return res.status(resultado.codigo).json({
+                    error: resultado.mensaje
+                });
+            }
+            
+        } catch (error) {
+            console.log('Error en controlador de desinscripción:', error.message);
+            return res.status(500).json({
+                error: 'Error interno del servidor'
             });
         }
     }
