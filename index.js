@@ -1,7 +1,13 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 
 import EventRouter from "./src/routes/event-routes.js";
+import UserRouter from "./src/routes/user-routes.js";
+
+// Cargar variables de entorno
+dotenv.config();
+
 const app = express();
 const port = 3000;
 
@@ -9,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/event', EventRouter);
+app.use('/api/user', UserRouter);
 
 // Middleware para manejar rutas que no existen (404)
 app.use((req, res) => {
