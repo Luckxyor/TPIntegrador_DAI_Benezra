@@ -1,0 +1,577 @@
+{
+	"info": {
+		"_postman_id": "87d6acb1-182a-4f43-95fb-4f3c0186f334",
+		"name": "TPIntegrador_Endpoints_Benezra",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43010902"
+	},
+	"item": [
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "CRUDEventos",
+					"item": [
+						{
+							"name": "CrearEvento (Con Auth)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RfbmFtZSI6Ikp1YW4iLCJsYXN0X25hbWUiOiJQw6lyZXoiLCJ1c2VybmFtZSI6Imp1YW5AZW1haWwuY29tIiwiaWF0IjoxNzUyNzI0ODczLCJleHAiOjE3NTI4MTEyNzN9.Ys1Z5BlsSOyJkOhsI4_aIMalfItIGkh9oXJ-zbLvi_4",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Concierto de Rock Nacional\",\r\n    \"description\": \"Un gran evento de rock nacional con las mejores bandas\",\r\n    \"id_event_location\": 1,\r\n    \"start_date\": \"2025-08-15T20:00:00\",\r\n    \"duration_in_minutes\": 180,\r\n    \"price\": 2500,\r\n    \"enabled_for_enrollment\": true,\r\n    \"max_assistance\": 250\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/event/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"event",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ActualizarEvento (Con Auth)",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RfbmFtZSI6Ikp1YW4iLCJsYXN0X25hbWUiOiJQw6lyZXoiLCJ1c2VybmFtZSI6Imp1YW5AZW1haWwuY29tIiwiaWF0IjoxNzUyNzI0ODczLCJleHAiOjE3NTI4MTEyNzN9.Ys1Z5BlsSOyJkOhsI4_aIMalfItIGkh9oXJ-zbLvi_4",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 6,\r\n    \"name\": \"Concierto de Rock Nacional - ACTUALIZADO\",\r\n    \"description\": \"Descripción actualizada con más detalles del evento\",\r\n    \"id_event_location\": 2,\r\n    \"start_date\": \"2025-08-16T21:00:00\",\r\n    \"duration_in_minutes\": 200,\r\n    \"price\": 3000,\r\n    \"enabled_for_enrollment\": true,\r\n    \"max_assistance\": 500\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/event/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"event",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "EliminarEvento (Con Auth)",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RfbmFtZSI6Ikp1YW4iLCJsYXN0X25hbWUiOiJQw6lyZXoiLCJ1c2VybmFtZSI6Imp1YW5AZW1haWwuY29tIiwiaWF0IjoxNzUyNzI0ODczLCJleHAiOjE3NTI4MTEyNzN9.Ys1Z5BlsSOyJkOhsI4_aIMalfItIGkh9oXJ-zbLvi_4",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 6,\r\n    \"name\": \"Concierto de Rock Nacional - ACTUALIZADO\",\r\n    \"description\": \"Descripción actualizada con más detalles del evento\",\r\n    \"id_event_location\": 2,\r\n    \"start_date\": \"2025-08-16T21:00:00\",\r\n    \"duration_in_minutes\": 200,\r\n    \"price\": 3000,\r\n    \"enabled_for_enrollment\": true,\r\n    \"max_assistance\": 500\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/event/6",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"event",
+										"6"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ListarEventos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/event/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarEventosNombre",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/event/?name=rock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "rock"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarEventosFecha",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/event/?fecha=2025-08-15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event",
+								""
+							],
+							"query": [
+								{
+									"key": "fecha",
+									"value": "2025-08-15"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarEventosTag",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/event/?tag=Presencial",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event",
+								""
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "Presencial"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarEventosCombinacion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/event/?name=rock&tag=Presencial&fecha=2025-08-15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "rock"
+								},
+								{
+									"key": "tag",
+									"value": "Presencial"
+								},
+								{
+									"key": "fecha",
+									"value": "2025-08-15"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarEventoID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/event/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "RegistrarUsuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"Juan\",\r\n    \"last_name\": \"Pérez\",\r\n    \"username\": \"juan@email.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LoginUsuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"juan@email.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Event_enrollments",
+			"item": [
+				{
+					"name": "InscribirseAEvento",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RfbmFtZSI6Ikp1YW4iLCJsYXN0X25hbWUiOiJQw6lyZXoiLCJ1c2VybmFtZSI6Imp1YW5AZW1haWwuY29tIiwiaWF0IjoxNzUyNzI0ODczLCJleHAiOjE3NTI4MTEyNzN9.Ys1Z5BlsSOyJkOhsI4_aIMalfItIGkh9oXJ-zbLvi_4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/event/1/enrollment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event",
+								"1",
+								"enrollment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DesincribirseDeEvento",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RfbmFtZSI6Ikp1YW4iLCJsYXN0X25hbWUiOiJQw6lyZXoiLCJ1c2VybmFtZSI6Imp1YW5AZW1haWwuY29tIiwiaWF0IjoxNzUyNzI0ODczLCJleHAiOjE3NTI4MTEyNzN9.Ys1Z5BlsSOyJkOhsI4_aIMalfItIGkh9oXJ-zbLvi_4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/event/1/enrollment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event",
+								"1",
+								"enrollment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Event_locations",
+			"item": [
+				{
+					"name": "ListarEventLocation",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RfbmFtZSI6Ikp1YW4iLCJsYXN0X25hbWUiOiJQw6lyZXoiLCJ1c2VybmFtZSI6Imp1YW5AZW1haWwuY29tIiwiaWF0IjoxNzUyNzI0ODczLCJleHAiOjE3NTI4MTEyNzN9.Ys1Z5BlsSOyJkOhsI4_aIMalfItIGkh9oXJ-zbLvi_4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/event-location",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event-location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarEventLocationID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RfbmFtZSI6Ikp1YW4iLCJsYXN0X25hbWUiOiJQw6lyZXoiLCJ1c2VybmFtZSI6Imp1YW5AZW1haWwuY29tIiwiaWF0IjoxNzUyNzI0ODczLCJleHAiOjE3NTI4MTEyNzN9.Ys1Z5BlsSOyJkOhsI4_aIMalfItIGkh9oXJ-zbLvi_4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/event-location/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event-location",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CrearEventLocation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RfbmFtZSI6Ikp1YW4iLCJsYXN0X25hbWUiOiJQw6lyZXoiLCJ1c2VybmFtZSI6Imp1YW5AZW1haWwuY29tIiwiaWF0IjoxNzUyNzI0ODczLCJleHAiOjE3NTI4MTEyNzN9.Ys1Z5BlsSOyJkOhsI4_aIMalfItIGkh9oXJ-zbLvi_4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Mi Salón de Eventos\",\r\n  \"full_address\": \"Av. Corrientes 1234, CABA\",\r\n  \"max_capacity\": 100,\r\n  \"latitude\": -34.6037,\r\n  \"longitude\": -58.3816,\r\n  \"id_location\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/event-location",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event-location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ActualizarEventLocation",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RfbmFtZSI6Ikp1YW4iLCJsYXN0X25hbWUiOiJQw6lyZXoiLCJ1c2VybmFtZSI6Imp1YW5AZW1haWwuY29tIiwiaWF0IjoxNzUyNzI0ODczLCJleHAiOjE3NTI4MTEyNzN9.Ys1Z5BlsSOyJkOhsI4_aIMalfItIGkh9oXJ-zbLvi_4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Mi Salón de Eventos\",\r\n  \"full_address\": \"Av. Corrientes 1234, CABA\",\r\n  \"max_capacity\": 100,\r\n  \"latitude\": -34.6037,\r\n  \"longitude\": -58.3816,\r\n  \"id_location\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/event-location/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event-location",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ActualizarEventLocation Copy",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RfbmFtZSI6Ikp1YW4iLCJsYXN0X25hbWUiOiJQw6lyZXoiLCJ1c2VybmFtZSI6Imp1YW5AZW1haWwuY29tIiwiaWF0IjoxNzUyNzI0ODczLCJleHAiOjE3NTI4MTEyNzN9.Ys1Z5BlsSOyJkOhsI4_aIMalfItIGkh9oXJ-zbLvi_4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/event-location/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event-location",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
