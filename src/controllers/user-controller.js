@@ -1,11 +1,11 @@
 import UserService from '../services/user-service.js';
+import { Router } from 'express';
 
 export default class UserController {
     constructor() {
         this.service = new UserService();
     }
     
-    // POST /api/user/register
     registrarUsuario = async (req, res) => {
         try {
             const datosUsuario = req.body;
@@ -33,7 +33,6 @@ export default class UserController {
         }
     }
     
-    // POST /api/user/login
     loginUsuario = async (req, res) => {
         try {
             const datosLogin = req.body;
@@ -55,3 +54,13 @@ export default class UserController {
         }
     }
 }
+
+export const createUserRoutes = () => {
+    const router = Router();
+    const userController = new UserController();
+
+    router.post('/register', userController.registrarUsuario);
+    router.post('/login', userController.loginUsuario);
+
+    return router;
+};

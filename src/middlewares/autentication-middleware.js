@@ -13,7 +13,6 @@ export default class AutenticacionMiddleware {
                 });
             }
             
-            // El token puede venir como "Bearer <token>" o solo "<token>"
             const tokenLimpio = token.startsWith('Bearer ') ? token.slice(7) : token;
             
             const jwtSecret = process.env.JWT_SECRET || 'mi_clave_secreta_super_segura';

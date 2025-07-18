@@ -1,7 +1,6 @@
 import pg from 'pg';
 import bcrypt from 'bcryptjs';
 import DBConfig from '../configs/db-config.js';
-import Usuario from '../entities/user.js';
 
 export default class UsuarioRepository {
     
@@ -24,14 +23,14 @@ export default class UsuarioRepository {
                 return null;
             }
             
-            const fila = resultado.rows[0];
-            return new Usuario(
-                fila.id,
-                fila.first_name,
-                fila.last_name,
-                fila.username,
-                fila.password
-            );
+            const usuario = resultado.rows[0];
+            return {
+                id: usuario.id,
+                first_name: usuario.first_name,
+                last_name: usuario.last_name,
+                username: usuario.username,
+                password: usuario.password
+            };
             
         } catch (error) {
             console.log('Error en BD:', error.message);
@@ -81,14 +80,14 @@ export default class UsuarioRepository {
                 return null;
             }
             
-            const fila = resultado.rows[0];
-            return new Usuario(
-                fila.id,
-                fila.first_name,
-                fila.last_name,
-                fila.username,
-                null // No devolvemos la contraseña
-            );
+            const usuario = resultado.rows[0];
+            return {
+                id: usuario.id,
+                first_name: usuario.first_name,
+                last_name: usuario.last_name,
+                username: usuario.username,
+                password: null
+            };
             
         } catch (error) {
             console.log('Error en BD:', error.message);

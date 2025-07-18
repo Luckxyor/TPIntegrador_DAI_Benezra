@@ -6,14 +6,26 @@ export default class EventService {
         this.repository = new EventRepository();
     }
 
-    // Obtener todos los eventos con filtros
-    async obtenerEventos(filtros = {}) {
+    async obtenerEventos(filtros = {}, limite = 10, offset = 0) {
         try {
-            const eventos = await this.repository.obtenerTodosLosEventos(filtros);
-            return eventos;
+            const resultado = await this.repository.obtenerTodosLosEventos(filtros, limite, offset);
+            
+            return {
+                collection: resultado.eventos,
+                pagination: resultado.pagination
+            };
+            
         } catch (error) {
             console.log('Error en servicio:', error);
-            return [];
+            return {
+                message: 'Error interno del servidor.',
+                collection: [],
+                pagination: {
+                    offset: parseInt(offset),
+                    limit: parseInt(limite),
+                    total: 0
+                }
+            };
         }
     }
 

@@ -5,13 +5,17 @@ const { Client } = pkg;
 
 export default class EventRepository {
     
-    // Obtener todos los eventos con filtros
-    async obtenerTodosLosEventos(filtros = {}) {
+    async obtenerTodosLosEventos(filtros = {}, limite = 10, offset = 0) {
         const cliente = new Client(DBConfig);
         try {
             await cliente.connect();
             
-            // Query para obtener eventos
+            let consultaCount = `
+                select count(*) as total
+                from events e
+                where 1=1
+            `;
+            
             let consulta = `
                 select 
                     e.id,
@@ -22,61 +26,155 @@ export default class EventRepository {
                     e.price,
                     e.enabled_for_enrollment,
                     e.max_assistance,
-                    u.first_name as creator_first_name,
-                    u.last_name as creator_last_name,
-                    u.username as creator_username,
-                    el.name as location_name,
-                    el.full_address as location_address,
-                    el.max_capacity as location_capacity
+                    e.id_event_location,
+                    e.id_creator_user
                 from events e
-                left join users u on e.id_creator_user = u.id
-                left join event_locations el on e.id_event_location = el.id
                 where 1=1
             `;
             
             const valores = [];
+            const valoresCount = [];
             let indiceParametro = 1;
             
-            // Filtro por nombre
             if (filtros.nombre) {
-                consulta += ` and lower(e.name) like lower($${indiceParametro})`;
-                valores.push(`%${filtros.nombre}%`);
+                const condicion = ` and lower(e.name) like lower($${indiceParametro})`;
+                consulta += condicion;
+                consultaCount += condicion;
+                const valor = `%${filtros.nombre}%`;
+                valores.push(valor);
+                valoresCount.push(valor);
                 indiceParametro++;
             }
             
-            // Filtro por fecha
             if (filtros.fecha) {
-                consulta += ` and date(e.start_date) = $${indiceParametro}`;
-                valores.push(filtros.fecha);
+                const condicion = ` and date(e.start_date) = $${indiceParametro}`;
+                consulta += condicion;
+                consultaCount += condicion;
+                const valor = filtros.fecha;
+                valores.push(valor);
+                valoresCount.push(valor);
                 indiceParametro++;
             }
             
-            // Filtro por tag
             if (filtros.tag) {
-                consulta += ` and e.id in (
+                const condicion = ` and e.id in (
                     select et.id_event 
                     from event_tags et 
                     join tags t on et.id_tag = t.id 
                     where lower(t.name) like lower($${indiceParametro})
                 )`;
-                valores.push(`%${filtros.tag}%`);
+                consulta += condicion;
+                consultaCount += condicion;
+                const valor = `%${filtros.tag}%`;
+                valores.push(valor);
+                valoresCount.push(valor);
                 indiceParametro++;
             }
             
-            consulta += ` order by e.start_date asc`;
+            const resultadoCount = await cliente.query(consultaCount, valoresCount);
+            const total = parseInt(resultadoCount.rows[0].total);
+            
+            consulta += ` order by e.start_date asc limit $${indiceParametro} offset $${indiceParametro + 1}`;
+            valores.push(limite, offset);
             
             const resultado = await cliente.query(consulta, valores);
-            return resultado.rows;
+            
+            const eventosCompletos = [];
+            
+            for (const evento of resultado.rows) {
+                const eventoCompleto = await this.obtenerEventoConDetalles(evento, cliente);
+                eventosCompletos.push(eventoCompleto);
+            }
+            
+            return {
+                eventos: eventosCompletos,
+                pagination: {
+                    offset: parseInt(offset),
+                    limit: parseInt(limite),
+                    total: total
+                }
+            };
             
         } catch (error) {
             console.log('Error en BD:', error.message);
-            return [];
+            return {
+                eventos: [],
+                pagination: {
+                    offset: parseInt(offset),
+                    limit: parseInt(limite),
+                    total: 0
+                }
+            };
         } finally {
             await cliente.end();
         }
     }
 
-    // Obtener un evento por ID con todos los detalles
+    async obtenerEventoConDetalles(evento, cliente) {
+        const consultaCreador = `
+            select id, first_name, last_name, username
+            from users 
+            where id = $1
+        `;
+        
+        const consultaEventLocation = `
+            select 
+                el.id,
+                el.id_location,
+                el.name,
+                el.full_address,
+                el.max_capacity,
+                el.latitude,
+                el.longitude,
+                json_build_object(
+                    'id', l.id,
+                    'name', l.name,
+                    'latitude', l.latitude,
+                    'longitude', l.longitude,
+                    'province', json_build_object(
+                        'id', p.id,
+                        'name', p.name,
+                        'full_name', p.full_name,
+                        'latitude', p.latitude,
+                        'longitude', p.longitude,
+                        'display_order', p.display_order
+                    )
+                ) as location
+            from event_locations el
+            left join locations l on el.id_location = l.id
+            left join provinces p on l.id_province = p.id
+            where el.id = $1
+        `;
+        
+        const consultaTags = `
+            select t.id, t.name
+            from tags t
+            join event_tags et on t.id = et.id_tag
+            where et.id_event = $1
+            order by t.name
+        `;
+        
+        const [creador, eventLocation, tags] = await Promise.all([
+            cliente.query(consultaCreador, [evento.id_creator_user]),
+            cliente.query(consultaEventLocation, [evento.id_event_location]),
+            cliente.query(consultaTags, [evento.id])
+        ]);
+        
+        return {
+            id: evento.id,
+            name: evento.name,
+            description: evento.description,
+            event_location: eventLocation.rows[0] || null,
+            start_date: evento.start_date,
+            duration_in_minutes: evento.duration_in_minutes,
+            price: evento.price,
+            enabled_for_enrollment: evento.enabled_for_enrollment,
+            max_assistance: evento.max_assistance,
+            creator_user: creador.rows[0] || null,
+            tags: tags.rows
+        };
+    }
+
     async obtenerEventoPorId(id) {
         const cliente = new Client(DBConfig);
         try {

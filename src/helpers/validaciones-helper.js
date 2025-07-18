@@ -1,22 +1,18 @@
 export default class ValidacionesHelper {
     
-    // Validar que el email tenga formato válido
     static validarEmail(email) {
         const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return regexEmail.test(email);
     }
     
-    // Validar que los nombres tengan al menos 3 caracteres y no estén vacíos
     static validarNombre(nombre) {
         return nombre && typeof nombre === 'string' && nombre.trim().length >= 3;
     }
     
-    // Validar que la contraseña tenga al menos 3 caracteres y no esté vacía
     static validarContrasena(contrasena) {
         return contrasena && typeof contrasena === 'string' && contrasena.trim().length >= 3;
     }
     
-    // Validar todos los campos de registro
     static validarDatosRegistro(datosUsuario) {
         const errores = [];
         
@@ -146,6 +142,43 @@ export default class ValidacionesHelper {
         
         if (fechaEventoSinHora <= hoy) {
             errores.push('No se puede desinscribir de un evento que ya sucedió o es hoy.');
+        }
+        
+        return errores;
+    }
+    
+    // Validar datos de event location
+    static validarDatosEventLocation(datosEventLocation) {
+        const errores = [];
+        
+        // Validar name
+        if (!datosEventLocation.name || typeof datosEventLocation.name !== 'string' || datosEventLocation.name.trim().length < 3) {
+            errores.push('El campo name debe tener al menos 3 caracteres.');
+        }
+        
+        // Validar full_address  
+        if (!datosEventLocation.full_address || typeof datosEventLocation.full_address !== 'string' || datosEventLocation.full_address.trim().length < 3) {
+            errores.push('El campo full_address debe tener al menos 3 caracteres.');
+        }
+        
+        // Validar max_capacity
+        if (datosEventLocation.max_capacity === undefined || datosEventLocation.max_capacity < 1) {
+            errores.push('La capacidad máxima debe ser al menos 1.');
+        }
+        
+        // Validar latitude
+        if (datosEventLocation.latitude === undefined || isNaN(datosEventLocation.latitude)) {
+            errores.push('La latitud debe ser un número válido.');
+        }
+        
+        // Validar longitude
+        if (datosEventLocation.longitude === undefined || isNaN(datosEventLocation.longitude)) {
+            errores.push('La longitud debe ser un número válido.');
+        }
+        
+        // Validar id_location
+        if (!datosEventLocation.id_location || isNaN(datosEventLocation.id_location)) {
+            errores.push('Debe especificar una ubicación base válida.');
         }
         
         return errores;

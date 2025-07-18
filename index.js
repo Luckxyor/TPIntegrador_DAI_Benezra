@@ -2,10 +2,10 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import EventRouter from "./src/routes/event-routes.js";
-import UserRouter from "./src/routes/user-routes.js";
+import { createEventRoutes } from "./src/controllers/event-controller.js";
+import { createUserRoutes } from "./src/controllers/user-controller.js";
+import { createEventLocationRoutes } from "./src/controllers/event-location-controller.js";
 
-// Cargar variables de entorno
 dotenv.config();
 
 const app = express();
@@ -14,10 +14,10 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/event', EventRouter);
-app.use('/api/user', UserRouter);
+app.use('/api/event', createEventRoutes());
+app.use('/api/user', createUserRoutes());
+app.use('/api/event-location', createEventLocationRoutes());
 
-// Middleware para manejar rutas que no existen (404)
 app.use((req, res) => {
     res.status(404).json({
         error: `La ruta ${req.originalUrl} no existe`

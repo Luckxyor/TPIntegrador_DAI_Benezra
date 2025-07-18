@@ -1,14 +1,16 @@
 import EventService from '../services/event-service.js'
+import { Router } from 'express';
+import AutenticacionMiddleware from '../middlewares/autentication-middleware.js';
 
 export default class EventController {
     constructor() {
         this.service = new EventService();
     }
 
-    // Obtener todos los eventos con filtros
     obtenerTodosLosEventos = async (req, res) => {
         try {
-            // Obtener filtros de la URL
+            const { limit = 10, offset = 0 } = req.query;
+            
             const filtros = {};
             
             if (req.query.name) {
@@ -23,9 +25,8 @@ export default class EventController {
                 filtros.tag = req.query.tag.trim();
             }
             
-            // Obtener eventos
-            const eventos = await this.service.obtenerEventos(filtros);
-            return res.status(200).json(eventos);
+            const resultado = await this.service.obtenerEventos(filtros, limit, offset);
+            return res.status(200).json(resultado);
             
         } catch (error) {
             console.log('Error en controlador:', error.message);
@@ -216,3 +217,18 @@ export default class EventController {
         }
     }
 }
+
+export const createEventRoutes = () => {
+    const router = Router();
+    const controladorEventos = new EventController();
+
+    router.get('/', controladorEventos.obtenerTodosLosEventos);
+    router.get('/:id', controladorEventos.obtenerEventoPorId);
+    router.post('/', AutenticacionMiddleware.verificarToken, controladorEventos.crearEvento);
+    router.put('/', AutenticacionMiddleware.verificarToken, controladorEventos.actualizarEvento);
+    router.delete('/:id', AutenticacionMiddleware.verificarToken, controladorEventos.eliminarEvento);
+    router.post('/:id/enrollment', AutenticacionMiddleware.verificarToken, controladorEventos.inscribirUsuarioAEvento);
+    router.delete('/:id/enrollment', AutenticacionMiddleware.verificarToken, controladorEventos.desinscribirUsuarioDeEvento);
+
+    return router;
+};
