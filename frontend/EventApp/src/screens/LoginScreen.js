@@ -26,11 +26,17 @@ export default function LoginScreen({ navigation }) {
     }
 
     setLoading(true);
-    const result = await login(username.trim(), password);
-    setLoading(false);
-
-    if (!result.success) {
-      Alert.alert('Error', result.error || 'Error al iniciar sesión');
+    try {
+      const result = await login(username.trim(), password);
+      
+      if (!result.success) {
+        Alert.alert('Error', result.error || 'Error al iniciar sesión');
+      }
+    } catch (error) {
+      console.error('Unexpected login error:', error);
+      Alert.alert('Error', 'Error inesperado al iniciar sesión');
+    } finally {
+      setLoading(false);
     }
   };
 

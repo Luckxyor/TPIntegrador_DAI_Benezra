@@ -109,10 +109,19 @@ export default class UsuarioService {
             
             const token = jwt.sign(payload, this.jwtSecret, { expiresIn: this.jwtExpiration });
             
+            // Preparar datos del usuario para devolver (sin contraseña)
+            const userData = {
+                id: usuario.id,
+                first_name: usuario.first_name,
+                last_name: usuario.last_name,
+                username: usuario.username
+            };
+            
             return {
                 exito: true,
                 mensaje: '',
                 token: token,
+                user: userData,
                 codigo: 200
             };
             

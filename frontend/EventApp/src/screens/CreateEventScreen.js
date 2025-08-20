@@ -39,9 +39,21 @@ export default function CreateEventScreen({ navigation }) {
   const loadLocations = async () => {
     try {
       const response = await eventLocationService.getEventLocations();
-      setLocations(response || []);
+      console.log('Event locations response:', response);
+      
+      // Asegurar que siempre sea un array
+      if (Array.isArray(response)) {
+        setLocations(response);
+      } else if (response && Array.isArray(response.data)) {
+        setLocations(response.data);
+      } else {
+        console.warn('Response is not an array:', response);
+        setLocations([]);
+      }
     } catch (error) {
+      console.error('Error loading locations:', error);
       Alert.alert('Error', 'Error al cargar ubicaciones');
+      setLocations([]); // Fallback a array vacío
     }
   };
 
@@ -126,7 +138,7 @@ export default function CreateEventScreen({ navigation }) {
                 style={styles.picker}
               >
                 <Picker.Item label="Selecciona una ubicación" value="" />
-                {locations.map((location) => (
+                {Array.isArray(locations) && locations.map((location) => (
                   <Picker.Item
                     key={location.id}
                     label={location.name}

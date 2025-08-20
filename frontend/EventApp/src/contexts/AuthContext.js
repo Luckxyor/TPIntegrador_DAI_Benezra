@@ -1,6 +1,38 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { authService } from '../services/authService';
+import { getToken, setToken, removeToken } from '../services/api';
+
+// Función para obtener datos del usuario de forma segura según la plataforma
+const getUserData = async () => {
+  try {
+    if (Platform.OS === 'web') {
+      const userData = localStorage.getItem('userData');
+      return userData ? JSON.parse(userData) : null;
+    } else {
+      const userData = await SecureStore.getItemAsync('userData');
+      return userData ? JSON.parse(userData) : null;
+    }
+  } catch (error) {
+    console.warn('Error getting user data:', error);
+    return null;
+  }
+};
+
+// Función para guardar datos del usuario de forma segura según la plataforma
+const setUserData = async (userData) => {
+  try {
+    const userDataString = JSON.stringify(userData);
+    if (Platform.OS === 'web') {
+      localStorage.setItem('userData', userDataString);
+    } else {
+      await SecureStore.setItemAsync('userData', userDataString);
+    }
+  } catch (error) {
+    console.warn('Error setting user data:', error);
+  }
+};
 
 export const AuthContext = createContext();
 
@@ -14,11 +46,11 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuthState = async () => {
     try {
-      const token = await SecureStore.getItemAsync('userToken');
-      const userData = await SecureStore.getItemAsync('userData');
+      const token = await getToken();
+      const userData = await getUserData();
       
       if (token && userData) {
-        setUser(JSON.parse(userData));
+        setUser(userData);
       }
     } catch (error) {
       console.error('Error checking auth state:', error);
@@ -31,13 +63,13 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authService.login(username, password);
       
-      await SecureStore.setItemAsync('userToken', response.token);
-      await SecureStore.setItemAsync('userData', JSON.stringify(response.user));
+      await setToken(response.token);
+      await setUserData(response.user);
       
       setUser(response.user);
       return { success: true };
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Login error in AuthContext:', error);
       return { success: false, error: error.message };
     }
   };
@@ -46,8 +78,8 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authService.register(userData);
       
-      await SecureStore.setItemAsync('userToken', response.token);
-      await SecureStore.setItemAsync('userData', JSON.stringify(response.user));
+      await setToken(response.token);
+      await setUserData(response.user);
       
       setUser(response.user);
       return { success: true };
@@ -59,8 +91,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await SecureStore.deleteItemAsync('userToken');
-      await SecureStore.deleteItemAsync('userData');
+      await removeToken();
       setUser(null);
     } catch (error) {
       console.error('Logout error:', error);

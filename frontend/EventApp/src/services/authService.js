@@ -9,7 +9,7 @@ class AuthService {
       });
       return response;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Error al iniciar sesión');
+      throw new Error(error.response?.data?.message || error.message || 'Error al iniciar sesión');
     }
   }
 

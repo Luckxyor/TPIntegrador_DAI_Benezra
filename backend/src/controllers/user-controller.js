@@ -41,7 +41,8 @@ export default class UserController {
             return res.status(resultado.codigo).json({
                 success: resultado.exito,
                 message: resultado.mensaje,
-                token: resultado.token
+                token: resultado.token,
+                user: resultado.user
             });
             
         } catch (error) {
@@ -49,7 +50,8 @@ export default class UserController {
             return res.status(500).json({
                 success: false,
                 message: 'Error interno del servidor.',
-                token: ''
+                token: '',
+                user: null
             });
         }
     }
